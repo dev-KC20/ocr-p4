@@ -1,3 +1,16 @@
+# local data
+*.csv
+*.xls
+*.xlsx
+*.log
+*.cfg
+*.data
+data/
+
+# local settings
+.vscode/
+.idea/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
