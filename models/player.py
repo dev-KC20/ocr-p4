@@ -2,23 +2,8 @@
 # coding: utf-8
 """ Player who will participate to the tournament.
     """
-PLAYERS = ('Lucy',
-           'John',
-           'Lucy1',
-           'John1',
-           'Lucy2',
-           'John2',
-           'Lucy3',
-           'John3',
-           'Lucy4',
-           'John4',
-           'Lucy5',
-           'John5',
-           'Lucy6',
-           'John6',
-           'Lucy7',
-           'John7'
-           )
+
+# import constants    
 
 
 class Player:
