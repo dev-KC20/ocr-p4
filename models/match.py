@@ -14,3 +14,7 @@ class Match:
         """ Attach players and scores to the match.
          """
         self.match_result = list(zip(player_list, score_list))
+
+# TODO: Possibilité d'ins"rer des tests unitaire 
+# saisir plusieurs matchs exemples et vérifier le resultat attendu 
+# les scores sont liés si joueur1 =1 => joueur2 =0

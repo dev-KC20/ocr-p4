@@ -7,8 +7,8 @@ bla bla.
 
 import datetime
 
-GENDER = ("sans", "M", "F", "tous")
-CONTROLS = ("bullet", "blitz", "fast")
+GENDER = ["sans", "M", "F", "tous"]
+CONTROLS = ["bullet", "blitz", "fast"]
 TEST_FIRSTNAME_SLICE = 2
 TEST_START_DATE = datetime.date(1940, 1, 1)
 TEST_END_DATE = datetime.date(2000, 1, 1)
