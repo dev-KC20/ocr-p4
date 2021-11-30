@@ -23,14 +23,10 @@ class Tournament:
         self.time_control = time_control
         self.event_description = description
 
-    def add_player_to_tournament(self, toto: Player):
+    def add_player_to_tournament(self, new_player: Player):
         """ask for and register a player to the tournament.
                """
-        if toto == 'exit':
-            return False
-        else:
-            self.players.append(toto)
-            return True    
+        self.players.append(new_player)
 
     def generate_player_set(self):
         """register a player to the tournament.

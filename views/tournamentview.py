@@ -54,6 +54,12 @@ class TournamentView:
                     break
         return prompt_result
 
+    def prompt_to_exit(self):
+        exit_reply = self.prompt("Voulez-vous quittez? (Y/N)\
+                                   ", "str", "N", constants.YESORNO)
+
+        return True if exit_reply == 'Y' else False
+
     def prompt_for_tournament(self):
         """Prompt for details."""
         name = self.prompt("tapez le nom du tournoi : ", "str", "Paris grand\
@@ -72,15 +78,9 @@ class TournamentView:
 
     def prompt_for_player_tournament(self):
         """Prompt for details."""
-        name = self.prompt("tapez le nom du joueur ou exit pour quitter ", "str", "Martin")
-        if name != 'exit':
-            firstname = self.prompt("tapez le prénom du joueur : ", "str", "Paul")
-            birthdate = self.prompt("sa date de naissance (JJ/MM/AAAA): ", "date", "01/01/2000") 
-            gender = self.prompt("si indispensable, préciser le genre: ", "str", "F", constants.GENDER)
-            initial_ranking = self.prompt("son classement ELO : ", "int", 100)
-        else:
-            firstname = ''
-            birthdate = 0
-            gender = ''
-            initial_ranking = 0
+        name = self.prompt("tapez le nom du joueur", "str", "Martin")
+        firstname = self.prompt("tapez le prénom du joueur : ", "str", "Paul")
+        birthdate = self.prompt("sa date de naissance (JJ/MM/AAAA): ", "date", "01/01/2000") 
+        gender = self.prompt("si indispensable, préciser le genre: ", "str", "F", constants.GENDER)
+        initial_ranking = self.prompt("son classement ELO : ", "int", 100)
         return name, firstname, birthdate, gender, initial_ranking
