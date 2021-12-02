@@ -10,4 +10,5 @@ from controllers.base import Controller
 
 
 manage_event = Controller('TournamentView', 'create')
+# manage_event.manage_player()
 manage_event.run()

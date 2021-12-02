@@ -4,7 +4,7 @@
     """
 import datetime
 import constants
-
+from models.player import Player, Players
 
 class TournamentView:
 
@@ -24,8 +24,12 @@ class TournamentView:
                                                           list):
             raise("Merci de vérifier la liste passée à prompt()")
             return
+        if isinstance(default_response, str):
+            default_response_print = default_response
+        else:
+            default_response_print = str(default_response)
 
-        input_text = text + ' (defaut:' + str(default_response) +\
+        input_text = text + ' (defaut:' + default_response_print +\
             '):' if default_response is not None else ' :'
 
         while True:
@@ -36,7 +40,7 @@ class TournamentView:
                 if type_response == 'int':
                     try:
                         if int(prompt_result) > 0:
-                           break
+                            break
                     except ValueError:
                         raise("Ce chiffre n'est pas valide, Merci de recommencer.")
                 if type_response == 'date':
@@ -62,25 +66,44 @@ class TournamentView:
 
     def prompt_for_tournament(self):
         """Prompt for details."""
-        name = self.prompt("tapez le nom du tournoi : ", "str", "Paris grand\
-                            tournoi")
+        name = self.prompt("tapez le nom du tournoi : ", "str",
+                           "Paris grand tournoi")
         description = self.prompt("tapez une description du tournoi : ", "str",
                                   "Nous acceuillons nos voisins du 20eme.")
         location = self.prompt("le lieu du tournoi : ", "str", "Paris 18e")
         date = self.prompt("la date du tournoi (JJ/MM/AAAA): ", "date",
-                           29/12/2021)
+                           datetime.date(2021, 12, 29).strftime("%d/%m/%Y"))
         round_number = self.prompt("le nombre de ronde (défaut=4): ", "int", 4)
-        time_control = self.prompt("le type de partie bullet, blitz ,rapide :\
-                                   ", "str", "Blitz", constants.CONTROLS)
+        time_control = self.prompt("le type de partie : ", 
+                                   "str", constants.CONTROLS[0], 
+                                   constants.CONTROLS)
         return name, description, location, date, round_number, time_control
 # TODO: retourner une list et dans le constructeur __init__ input[]
 # TODO: utiliser les decorateurs pour le controle des types
 
-    def prompt_for_player_tournament(self):
+    def prompt_for_player_tournament(self, known_players: Player):
         """Prompt for details."""
+        for host in known_players:
+            print(host)
+
         name = self.prompt("tapez le nom du joueur", "str", "Martin")
         firstname = self.prompt("tapez le prénom du joueur : ", "str", "Paul")
-        birthdate = self.prompt("sa date de naissance (JJ/MM/AAAA): ", "date", "01/01/2000") 
-        gender = self.prompt("si indispensable, préciser le genre: ", "str", "F", constants.GENDER)
+        birthdate = self.prompt("sa date de naissance (JJ/MM/AAAA): ", "date", 
+                                datetime.date(2000, 1, 1).strftime("%d/%m/%Y")) 
+        gender = self.prompt("si indispensable, préciser le genre: ", "str",
+                             constants.GENDER[0], constants.GENDER)
         initial_ranking = self.prompt("son classement ELO : ", "int", 100)
         return name, firstname, birthdate, gender, initial_ranking
+
+    def prompt_for_player(self):
+        """Prompt for details."""
+    
+        name = self.prompt("tapez le nom du joueur", "str", "Martin")
+        firstname = self.prompt("tapez le prénom du joueur : ", "str", "Paul")
+        birthdate = self.prompt("sa date de naissance (JJ/MM/AAAA): ", "date", 
+                                datetime.date(2000, 1, 1).strftime("%d/%m/%Y")) 
+        gender = self.prompt("si indispensable, préciser le genre: ", "str",
+                             constants.GENDER[0], constants.GENDER)
+        initial_ranking = self.prompt("son classement ELO : ", "int", 100)
+        return name, firstname, birthdate, gender, initial_ranking
+

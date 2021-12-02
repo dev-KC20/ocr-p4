@@ -7,7 +7,7 @@ bla bla.
 
 import datetime
 
-GENDER = ["sans", "M", "F", "tous"]
+GENDER = ["sans", "M", "F"]
 YESORNO = ["Y", "N"]
 CONTROLS = ["bullet", "blitz", "fast"]
 TEST_FIRSTNAME_SLICE = 2

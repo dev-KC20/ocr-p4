@@ -9,14 +9,17 @@
 class Player:
     """ Person attending a chess tournament.
         """
-    def __init__(self, name, firstname, birthdate, gender, initial_ranking):
+    def __init__(self, name, firstname, birthdate, gender, initial_ranking,
+                 point_earned=0, opponent_met=[], doc_id=None):
         self.name = name
         self.firstname = firstname
         self.birthdate = birthdate
         self.gender = gender
         self.initial_ranking = initial_ranking
-        self.point_earned = 0
-        self.opponent_met = []
+        self.point_earned = point_earned
+        self.opponent_met = opponent_met
+        self.doc_id = doc_id
+
 
     def update_ranking(self, score):
         """ The player rank is updated according to match result.
@@ -38,11 +41,11 @@ class Players:
     """ List of know chess players.
         """
     def __init__(self):
-        self.known_players = []
+        self.players_known = []
 
     def add_player_to_list(self, new_player: Player):
         """register a player to the local list of player.
                """
-        self.known_players.append(new_player)
+        self.players_known.append(new_player)
         return True
 

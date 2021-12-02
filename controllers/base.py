@@ -2,13 +2,13 @@
 # coding: utf-8
 """Manage chess tournaments after swiss rules.
 
-bla bla.
+But also manage a list of known players
 """
 from tinydb import TinyDB  # , Query
 
 # import constants
 from models.tournament import Tournament
-from models.player import Player
+from models.player import Player, Players
 from views.tournamentview import TournamentView
 
 
@@ -35,47 +35,76 @@ class Controller:
 
         self.db = TinyDB('./data/db' + db_name + '.json', sort_keys=True)
 
-    def save_players(self, db_name):
-        """
+    def save_tournament_players(self, db_name, known_players: Players):
+        """ Save players added during tournament
+             """
+        for joueur in self.tournoi.players:
+            known_players.players_known.append(joueur)
+
+    def save_players(self, db_name, known_players: Players):
+        """ Save players 
              """
         self.serialized_players = []
         self.use_database(db_name)
         self.players_table = self.db.table('players')
-        print(f""" Nombre de joueurs présents en base {db_name}: 
-              {len(self.players_table)}""")
-        # self.players_table.truncate()
-        # prompted players to be serialized        
-        for joueur in self.tournoi.players:
-            # DONE: Players were serialized using built-in method __dict__
+        self.players_table.truncate()
+        for joueur in known_players:
             if joueur.__dict__.get('name'):
-                self.serialized_players.append(joueur.__dict__) 
+                self.serialized_players.append(joueur.__dict__)
+        print(f' {len(self.serialized_players)} joueurs connus après tournoi')
         self.players_table.insert_multiple(self.serialized_players)
 
-    def load_players(self, db_name):
-        """
+    def load_players(self, db_name, known_players: Players):
+        """ Load saved players into Players()
              """
         self.de_serialized_players = []
         self.use_database(db_name)
         self.players_table = self.db.table('players')
         self.de_serialized_players = self.players_table.all()
-        # print(f' loaded players: {self.de_serialized_players}')
-        # prompted players to be serialized        
-        # for joueur in self.tournoi.players:
-        #     print(joueur.__dict__)
-        #     if joueur.__dict__.get('name'):
-        #         self.serialized_players.append(joueur.__dict__) 
-        # self.players_table.insert_multiple(self.serialized_players)
+        for joueur in self.de_serialized_players:
+            known_players.append(
+                Player(joueur['name'],
+                       joueur['firstname'],
+                       joueur['birthdate'],
+                       joueur['gender'],
+                       joueur['initial_ranking'],
+                       joueur['point_earned'],
+                       joueur['opponent_met']
+# TODO: gérer son document id pour permettre la selection du joueur au tournoi
+                    #    ,joueur['doc_id'])
+               )   )
+# TODO: créer une vue pour gérer les joueurs <> de tournament 
+# qui devient ajout de joueur
+  
+    def manage_player(self):
+        """
+             """
+        self.player_set = Players()
+        self.load_players('test', self.player_set.players_known)
+        print(f' {len(self.player_set.players_known)} joueurs connus initialement')
+        while True:
+            player_new = Player(
+             *TournamentView().prompt_for_player())
+            if player_new is not None:
+                self.player_set.add_player_to_list(player_new)
+            if TournamentView().prompt_to_exit():
+                break
+        self.save_players('test', self.player_set.players_known)
 
     def run(self):
         """
              """
-        self.load_players('test')
+        self.player_set = Players()
+        self.load_players('test', self.player_set.players_known)
+        print(f' {len(self.player_set.players_known)} joueurs connus initialement')
         self.tournoi = self.create_tournament()
-        while False:
+        while True:
             player_new = Player(
-             *TournamentView().prompt_for_player_tournament())
-            self.tournoi.add_player_to_tournament(player_new)
-            if self.prompt_to_exit():
+             *TournamentView().prompt_for_player_tournament(self.player_set.players_known))
+            if player_new is not None:
+                self.tournoi.add_player_to_tournament(player_new)
+            if TournamentView().prompt_to_exit():
                 break
-        self.save_players('test')
+        self.save_tournament_players('test', self.player_set)
+        self.save_players('test', self.player_set.players_known)
 
