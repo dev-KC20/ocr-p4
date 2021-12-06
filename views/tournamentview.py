@@ -81,10 +81,9 @@ class TournamentView:
 # TODO: retourner une list et dans le constructeur __init__ input[]
 # TODO: utiliser les decorateurs pour le controle des types
 
-    def prompt_for_player_tournament(self, known_players: Player):
+    def prompt_for_player_tournament(self):
         """Prompt for details."""
-        for host in known_players:
-            print(host)
+
 
         name = self.prompt("tapez le nom du joueur", "str", "Martin")
         firstname = self.prompt("tapez le prénom du joueur : ", "str", "Paul")
