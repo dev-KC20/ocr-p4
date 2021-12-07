@@ -6,9 +6,9 @@ import datetime
 import constants
 from models.player import Player, Players
 
-class TournamentView:
+class View:
 
-    def prompt(self, text, type_response, default_response=None, closed_response=None):
+    def prompt(text, type_response, default_response=None, closed_response=None):
         """Attend une réponse conforme de l'utilisateur à l'input.
 
         text: le texte d'invite à afficher à l'utilisateur
@@ -58,23 +58,26 @@ class TournamentView:
                     break
         return prompt_result
 
-    def prompt_to_exit(self):
-        exit_reply = self.prompt("Voulez-vous quittez? (Y/N)\
+    def prompt_to_exit():
+        exit_reply = prompt("Voulez-vous quittez? (Y/N)\
                                    ", "str", "N", constants.YESORNO)
 
         return True if exit_reply == 'Y' else False
 
+
+class TournamentView(View):
+
     def prompt_for_tournament(self):
         """Prompt for details."""
-        name = self.prompt("tapez le nom du tournoi : ", "str",
+        name = View.prompt("tapez le nom du tournoi : ", "str",
                            "Paris grand tournoi")
-        description = self.prompt("tapez une description du tournoi : ", "str",
+        description = View.prompt("tapez une description du tournoi : ", "str",
                                   "Nous acceuillons nos voisins du 20eme.")
-        location = self.prompt("le lieu du tournoi : ", "str", "Paris 18e")
-        date = self.prompt("la date du tournoi (JJ/MM/AAAA): ", "date",
+        location = View.prompt("le lieu du tournoi : ", "str", "Paris 18e")
+        date = View.prompt("la date du tournoi (JJ/MM/AAAA): ", "date",
                            datetime.date(2021, 12, 29).strftime("%d/%m/%Y"))
-        round_number = self.prompt("le nombre de ronde (défaut=4): ", "int", 4)
-        time_control = self.prompt("le type de partie : ", 
+        round_number = View.prompt("le nombre de ronde (défaut=4): ", "int", 4)
+        time_control = View.prompt("le type de partie : ", 
                                    "str", constants.CONTROLS[0], 
                                    constants.CONTROLS)
         return name, description, location, date, round_number, time_control
@@ -85,24 +88,27 @@ class TournamentView:
         """Prompt for details."""
 
 
-        name = self.prompt("tapez le nom du joueur", "str", "Martin")
-        firstname = self.prompt("tapez le prénom du joueur : ", "str", "Paul")
-        birthdate = self.prompt("sa date de naissance (JJ/MM/AAAA): ", "date", 
+        name = View.prompt("tapez le nom du joueur", "str", "Martin")
+        firstname = View.prompt("tapez le prénom du joueur : ", "str", "Paul")
+        birthdate = View.prompt("sa date de naissance (JJ/MM/AAAA): ", "date", 
                                 datetime.date(2000, 1, 1).strftime("%d/%m/%Y")) 
-        gender = self.prompt("si indispensable, préciser le genre: ", "str",
+        gender = View.prompt("si indispensable, préciser le genre: ", "str",
                              constants.GENDER[0], constants.GENDER)
-        initial_ranking = self.prompt("son classement ELO : ", "int", 100)
+        initial_ranking = View.prompt("son classement ELO : ", "int", 100)
         return name, firstname, birthdate, gender, initial_ranking
+
+
+class PlayerView(View):
 
     def prompt_for_player(self):
         """Prompt for details."""
     
-        name = self.prompt("tapez le nom du joueur", "str", "Martin")
-        firstname = self.prompt("tapez le prénom du joueur : ", "str", "Paul")
-        birthdate = self.prompt("sa date de naissance (JJ/MM/AAAA): ", "date", 
+        name = View.prompt("tapez le nom du joueur", "str", "Martin")
+        firstname = View.prompt("tapez le prénom du joueur : ", "str", "Paul")
+        birthdate = View.prompt("sa date de naissance (JJ/MM/AAAA): ", "date", 
                                 datetime.date(2000, 1, 1).strftime("%d/%m/%Y")) 
-        gender = self.prompt("si indispensable, préciser le genre: ", "str",
+        gender = View.prompt("si indispensable, préciser le genre: ", "str",
                              constants.GENDER[0], constants.GENDER)
-        initial_ranking = self.prompt("son classement ELO : ", "int", 100)
+        initial_ranking = View.prompt("son classement ELO : ", "int", 100)
         return name, firstname, birthdate, gender, initial_ranking
 

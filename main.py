@@ -7,9 +7,4 @@ bla bla.
 
 # import constants
 from controllers.menuapp import AppController
-
-
 AppController().start()
-# manage_event = Controller('TournamentView', 'create')
-# manage_event.manage_player()
-# manage_event.run()

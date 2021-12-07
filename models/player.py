@@ -56,21 +56,30 @@ class Players:
                """
         return len(self._players_known)
 
+    def __str__(self):
+
+        for joueur in self._players_known:
+            print(joueur)
+
+        
+
+
     def load_players(self, db, db_table):
         """ Load saved players into Players()
              """
         self.de_serialized_players = []
         self.players_table = db.table(db_table)
         self.de_serialized_players = self.players_table.all()
+        print(self.de_serialized_players)
         for joueur in self.de_serialized_players:
             self._players_known.append(
-                Player(joueur['name'],
-                       joueur['firstname'],
-                       joueur['birthdate'],
-                       joueur['gender'],
-                       joueur['initial_ranking'],
-                       joueur['point_earned'],
-                       joueur['opponent_met']
+                Player(joueur['_name'],
+                       joueur['_firstname'],
+                       joueur['_birthdate'],
+                       joueur['_gender'],
+                       joueur['_initial_ranking'],
+                       joueur['_point_earned'],
+                       joueur['_opponent_met']
                        # TODO: gérer son document id pour permettre la selection du joueur au tournoi
                        #    ,joueur['doc_id'])
                        )

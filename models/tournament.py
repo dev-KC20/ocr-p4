@@ -41,4 +41,3 @@ class Tournament:
             """
         if len(self.rounds) <= self.round_number:
             self.rounds.append(Round(name))
-
