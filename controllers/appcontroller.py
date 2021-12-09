@@ -1,35 +1,23 @@
 #! /usr/bin/env python
 # coding: utf-8
 """Manage chess tournaments after swiss rules.
-
 But also manage a list of known players
 """
 from tinydb import TinyDB  # , Query
-
 from models.player import Player, Players
 from models.tournament import Tournament
 from utils.menu import Menu
 from views.menuview import MenuView
-from views.tournamentview import TournamentView
+from views.appview import TournamentView, PlayersView
 
 
 class AppController:
     def __init__(self):
-
         self.controller = None
         self.db_name = "test"
-        self.view = None
-
-    # def create_tournament(self):
-    # * pour unpack le tuple de parm renvoyé par prompt_.
-    # return Tournament(*TournamentView().prompt_for_tournament())
-    # tournoi_un.generate_player_set()
-    # for invite in tournoi_un.players:
-    #     print(f' Les joueurs invités sont {invite}')
-    # for tour in range(tournoi_un.round_number):
-    #     tournoi_un.add_round("Ronde" + str(tour+1))
-    # for ronde in tournoi_un.rounds:
-    #     print(ronde)
+        self.players_view = None
+        self.tournament_view = None
+        # self._player_set = None
 
     def use_database(self, db_name):
         self._db = TinyDB("./data/db" + db_name + ".json", sort_keys=True)
@@ -40,21 +28,6 @@ class AppController:
         for joueur in self.tournoi.players:
             known_players.players_known.append(joueur)
 
-    # def manage_player(self):
-    #     """
-    #          """
-    #     self.player_set = Players()
-    #     self.load_players('test', self.player_set.players_known)
-    #     print(f' {len(self.player_set.players_known)} joueurs initialement')
-    #     while True:
-    #         player_new = Player(
-    #             *TournamentView().prompt_for_player())
-    #         if player_new is not None:
-    #             self.player_set.add_player_to_list(player_new)
-    #         if TournamentView().prompt_to_exit():
-    #             break
-    #     self.save_players('test', self.player_set.players_known)
-
     def create_tournament(self):
         """ """
         self.tournoi = Tournament(*TournamentView().prompt_for_tournament())
@@ -64,33 +37,39 @@ class AppController:
             )
             if player_new is not None:
                 self.tournoi.add_player_to_tournament(player_new)
-                self.tournoi.add_player_to_players(player_new, self.player_set)
+                self.tournoi.add_player_to_players(
+                    player_new, self._player_set
+                )
             if TournamentView().prompt_to_exit():
                 break
 
     def start(self):
         # initialize DB and get players from DB
         self.db = self.use_database(self.db_name)
-
-        self.player_set = Players()
-        self.player_set.load_players(self.db, "players")
+        self._player_set = Players()
+        self._player_set.load_players(self.db, "players")
         print(
-            f" {self.player_set.get_number_of__players()} joueurs initialement"
+            f" {self._player_set.get_number_of__players()}\
+                 joueurs initialement"
         )
-
+        # initialize app views
+        self.players_view = PlayersView(self._player_set )
+        # show loaded player list
+        # print(self._player_set)
+        # print(f' loaded player set: {self._player_set}')
+        self.players_view.print_players()
         # manage menus
         self.controller = MenuController().run()
         while self.controller:
             self.controller = self.controller.run()
-
         # back up data
         print(
-            f" {self.player_set.get_number_of__players()} joueurs avant save"
+            f" {self._player_set.get_number_of__players()} joueurs avant save"
         )
-        self.player_set.save_players(self.db, "players")
+        self._player_set.save_players(self.db, "players")
 
 
-class MenuController:
+class MenuController():
     def run(self):
         """ """
         self.menu = Menu()
@@ -110,7 +89,7 @@ class MenuController:
         return next_menu
 
 
-class MenuPlayerController:
+class MenuPlayerController(AppController):
     def run(self):
         """ """
         self.menu = Menu()
@@ -121,12 +100,14 @@ class MenuPlayerController:
         self.menu.add_menu("80", "Retour à l'accueil", MenuController())
         self.menu.add_menu("90", "Quitter l'application", MenuExitController())
         chosen_option = MenuView(self.menu).get_user_input()
-
+        if chosen_option == "10":
+            # TODO: solve
+            print("accéder à la view d'affichage")
         next_menu = self.menu.get_action(chosen_option)
         return next_menu
 
 
-class MenuTournamentController:
+class MenuTournamentController():
     def run(self):
         """ """
         self.menu = Menu()
@@ -145,12 +126,12 @@ class MenuTournamentController:
         return next_menu
 
 
-class MenuReportsController:
+class MenuReportsController():
     def run(self):
         """ """
         self.menu = Menu()
         self.menu.add_menu(
-            "10", "Liste de tous les joueurs", MenuPlayerController()
+            "10", "Liste de tous les joueurs", MenuReportsController()
         )
         self.menu.add_menu(
             "20", "Liste des joueurs d'un tournoi", MenuTournamentController()
@@ -169,7 +150,7 @@ class MenuReportsController:
         return next_menu
 
 
-class MenuDBController:
+class MenuDBController():
     def run(self):
         """ """
         self.menu = Menu()
@@ -188,7 +169,7 @@ class MenuDBController:
         return next_menu
 
 
-class MenuExitController:
+class MenuExitController():
     def run(self):
         """ """
         self.menu = Menu()

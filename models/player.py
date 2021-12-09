@@ -61,7 +61,12 @@ class Players:
         """number of player."""
         return len(self._players_known)
 
-    def __str__(self):
+    # def __str__(self):
+
+    #     for joueur in self._players_known:
+    #         print(joueur)
+
+    def __repr__(self):
 
         for joueur in self._players_known:
             print(joueur)

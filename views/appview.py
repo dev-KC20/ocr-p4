@@ -151,3 +151,19 @@ class PlayerView(View):
         )
         initial_ranking = View.prompt("son classement ELO : ", "int", 100)
         return name, firstname, birthdate, gender, initial_ranking
+
+class PlayersView(View):
+    
+    def __init__(self, player_set):
+
+        self._player_set = player_set
+
+
+    def print_players(self):
+        """
+        """
+        print(" Liste des joueurs de la base")
+        print()
+        self._player_set
+        print()
+        return 

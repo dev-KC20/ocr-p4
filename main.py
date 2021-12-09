@@ -6,5 +6,5 @@ bla bla.
 """
 
 # import constants
-from controllers.menuapp import AppController
+from controllers.appcontroller import AppController
 AppController().start()
