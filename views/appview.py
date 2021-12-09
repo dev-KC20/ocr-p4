@@ -6,20 +6,16 @@ import datetime
 import constants
 
 # from models.player import Player, Players
-
-
 class View:
     def prompt(
         text, type_response, default_response=None, closed_response=None
     ):
         """Attend une réponse conforme de l'utilisateur à l'input.
-
         text: le texte d'invite à afficher à l'utilisateur
         type_response: si test de valeur (int)>0 ou (date) attendu
         default_response:  si rien n'est saisi, cette valeur sera retournée
         closed_response: la réponse doit être une des valeurs de la liste
         """
-
         if not isinstance(text, str):
             raise ("Merci de vérifier le texte passé à prompt()")
             return
@@ -32,13 +28,11 @@ class View:
             default_response_print = default_response
         else:
             default_response_print = str(default_response)
-
         input_text = (
             text + " (defaut:" + default_response_print + "):"
             if default_response is not None
             else " :"
         )
-
         while True:
             prompt_result = input(input_text)
             if default_response is not None and len(prompt_result) == 0:
@@ -79,7 +73,6 @@ class View:
             "N",
             constants.YESORNO,
         )
-
         return True if exit_reply == "Y" else False
 
 
@@ -111,10 +104,8 @@ class TournamentView(View):
 
     # TODO: retourner une list et dans le constructeur __init__ input[]
     # TODO: utiliser les decorateurs pour le controle des types
-
     def prompt_for_player_tournament(self):
         """Prompt for details."""
-
         name = View.prompt("tapez le nom du joueur", "str", "Martin")
         firstname = View.prompt("tapez le prénom du joueur : ", "str", "Paul")
         birthdate = View.prompt(
@@ -135,7 +126,6 @@ class TournamentView(View):
 class PlayerView(View):
     def prompt_for_player(self):
         """Prompt for details."""
-
         name = View.prompt("tapez le nom du joueur", "str", "Martin")
         firstname = View.prompt("tapez le prénom du joueur : ", "str", "Paul")
         birthdate = View.prompt(
@@ -152,18 +142,14 @@ class PlayerView(View):
         initial_ranking = View.prompt("son classement ELO : ", "int", 100)
         return name, firstname, birthdate, gender, initial_ranking
 
-class PlayersView(View):
-    
-    def __init__(self, player_set):
 
+class PlayersView(View):
+    def __init__(self, player_set):
         self._player_set = player_set
 
-
     def print_players(self):
-        """
-        """
+        """ """
         print(" Liste des joueurs de la base")
-        print()
-        self._player_set
-        print()
-        return 
+        for joueur in self._player_set.get_list_of_players():
+            if joueur is not None:
+                print(joueur)

@@ -2,7 +2,6 @@
 # coding: utf-8
 """ Player who will participate to the tournament.
     """
-
 # import constants
 # from tinydb import TinyDB  # , Query
 
@@ -35,7 +34,6 @@ class Player:
         self._point_earned += score
 
     def __str__(self):
-
         self._formated_player = f""" {self._firstname} {self._name}, né\
              {self._birthdate} {self._initial_ranking} ELO,
              score: {self._point_earned}"""
@@ -44,8 +42,6 @@ class Player:
 
 # TODO: ranking rang general avant tournoi ; pdt le tournoi rang nul
 # les points obtenus
-
-
 class Players:
     """List of know chess players."""
 
@@ -57,26 +53,21 @@ class Players:
         self._players_known.append(new_player)
         return True
 
-    def get_number_of__players(self):
+    def get_number_of_players(self):
         """number of player."""
         return len(self._players_known)
 
+    def get_list_of_players(self):
+        """list of all players"""
+        return self._players_known
+
     # def __str__(self):
-
-    #     for joueur in self._players_known:
-    #         print(joueur)
-
-    def __repr__(self):
-
-        for joueur in self._players_known:
-            print(joueur)
-
+    #     return self.__str__()
     def load_players(self, db, db_table):
         """Load saved players into Players()"""
         self.de_serialized_players = []
         self.players_table = db.table(db_table)
         self.de_serialized_players = self.players_table.all()
-        print(self.de_serialized_players)
         for joueur in self.de_serialized_players:
             self._players_known.append(
                 Player(
@@ -92,15 +83,20 @@ class Players:
                     #    ,joueur['doc_id'])
                 )
             )
+        print(f" {len(self._players_known)} joueurs chargés")
 
     def save_players(self, db, db_table):
-        """Save players"""
+        """Save players
+        Save uses the fact that a class has a description as dictionnary
+        the meta structure record is avoided.
+        """
         self.serialized_players = []
         self.players_table = db.table(db_table)
         self.players_table.truncate()
         for joueur in self._players_known:
-            # if joueur.__dict__.get('name'):
-            if joueur:
+            # only append data records
+            if joueur.__dict__.get("_name"):
                 self.serialized_players.append(joueur.__dict__)
-        print(f" {len(self.serialized_players)} joueurs connus après tournoi")
         self.players_table.insert_multiple(self.serialized_players)
+        print(f" {len(self.serialized_players)} joueurs sauvés")
+        # self.players_table.update_multiple(self.serialized_players)

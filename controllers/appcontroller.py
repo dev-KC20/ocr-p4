@@ -18,6 +18,8 @@ class AppController:
         self.players_view = None
         self.tournament_view = None
         # self._player_set = None
+        # start the menu loop
+        self.controller = MenuController().run()
 
     def use_database(self, db_name):
         self._db = TinyDB("./data/db" + db_name + ".json", sort_keys=True)
@@ -48,28 +50,19 @@ class AppController:
         self.db = self.use_database(self.db_name)
         self._player_set = Players()
         self._player_set.load_players(self.db, "players")
-        print(
-            f" {self._player_set.get_number_of__players()}\
-                 joueurs initialement"
-        )
+
         # initialize app views
-        self.players_view = PlayersView(self._player_set )
+        self.players_view = PlayersView(self._player_set)
         # show loaded player list
-        # print(self._player_set)
-        # print(f' loaded player set: {self._player_set}')
         self.players_view.print_players()
         # manage menus
-        self.controller = MenuController().run()
         while self.controller:
             self.controller = self.controller.run()
         # back up data
-        print(
-            f" {self._player_set.get_number_of__players()} joueurs avant save"
-        )
         self._player_set.save_players(self.db, "players")
 
 
-class MenuController():
+class MenuController:
     def run(self):
         """ """
         self.menu = Menu()
@@ -89,7 +82,7 @@ class MenuController():
         return next_menu
 
 
-class MenuPlayerController(AppController):
+class MenuPlayerController:
     def run(self):
         """ """
         self.menu = Menu()
@@ -107,7 +100,7 @@ class MenuPlayerController(AppController):
         return next_menu
 
 
-class MenuTournamentController():
+class MenuTournamentController:
     def run(self):
         """ """
         self.menu = Menu()
@@ -126,7 +119,7 @@ class MenuTournamentController():
         return next_menu
 
 
-class MenuReportsController():
+class MenuReportsController:
     def run(self):
         """ """
         self.menu = Menu()
@@ -150,7 +143,7 @@ class MenuReportsController():
         return next_menu
 
 
-class MenuDBController():
+class MenuDBController:
     def run(self):
         """ """
         self.menu = Menu()
@@ -169,7 +162,7 @@ class MenuDBController():
         return next_menu
 
 
-class MenuExitController():
+class MenuExitController:
     def run(self):
         """ """
         self.menu = Menu()
